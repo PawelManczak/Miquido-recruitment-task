@@ -12,3 +12,13 @@ fun PhotoDto.toDomain(size: Int): Photo {
         imageUrl = getSquareImageUrl(size)
     )
 }
+
+fun PhotoDto.toDomain(): Photo {
+    return Photo(
+        id = id,
+        author = author,
+        width = width,
+        height = height,
+        imageUrl = download_url
+    )
+}

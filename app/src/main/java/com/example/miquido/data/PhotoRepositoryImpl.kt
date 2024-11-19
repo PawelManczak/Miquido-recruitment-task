@@ -17,4 +17,13 @@ class PhotoRepositoryImpl @Inject constructor(private val apiService: ApiService
             Result.failure(e)
         }
     }
+
+    override suspend fun getPhotoById(id: String): Result<Photo> {
+        return try {
+            val photo = apiService.getPhotoDetails(id)
+            Result.success(photo.toDomain())
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 }

@@ -1,5 +1,6 @@
 package com.example.miquido.presentation.screen
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -28,27 +29,30 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import com.example.miquido.R
+import com.example.miquido.presentation.PhotoListAction
 import com.example.miquido.presentation.item.PhotoListItem
 import com.example.miquido.presentation.theme.LocalSpacing
+import com.example.miquido.presentation.view_model.PhotoListScreenState
 import com.example.miquido.presentation.view_model.PhotoListScreenViewModel
 import kotlinx.coroutines.flow.distinctUntilChanged
 
 @Composable
-fun PhotoListScreen(navController: NavController) {
+fun PhotoListScreen(
+    state: PhotoListScreenState,
+    onAction: (PhotoListAction) -> Unit,
+    modifier: Modifier = Modifier,
+) {
 
     val vm = hiltViewModel<PhotoListScreenViewModel>()
 
-    val state by vm.state.collectAsState()
+    //val state by vm.state.collectAsState()
     val spacing = LocalSpacing.current
 
     val gridState = rememberLazyGridState()
 
-    // Implementacja infinite scrolling
     LaunchedEffect(key1 = gridState) {
-        snapshotFlow { gridState.firstVisibleItemIndex + gridState.layoutInfo.visibleItemsInfo.size }
-            .distinctUntilChanged()
+        snapshotFlow { gridState.firstVisibleItemIndex + gridState.layoutInfo.visibleItemsInfo.size }.distinctUntilChanged()
             .collect { visibleItemCount ->
                 val totalItemsCount = gridState.layoutInfo.totalItemsCount
                 if (visibleItemCount >= totalItemsCount - 3 && !state.isLoading) {
@@ -58,46 +62,43 @@ fun PhotoListScreen(navController: NavController) {
     }
 
     Column(Modifier.padding(spacing.regular)) {
-        if (state.isLoading && state.photos.isEmpty()) {
-            // Pokaż wskaźnik ładowania tylko przy początkowym ładowaniu danych
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator()
-            }
-        } else {
-            Text(
-                text = stringResource(R.string.list_of_photos),
-                style = MaterialTheme.typography.titleLarge
-            )
-            Spacer(modifier = Modifier.height(spacing.regular))
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(3),
-                state = gridState,
-                contentPadding = PaddingValues(spacing.small),
-                horizontalArrangement = Arrangement.spacedBy(spacing.small),
-                verticalArrangement = Arrangement.spacedBy(spacing.small),
-                modifier = Modifier.fillMaxSize()
-            ) {
-                items(state.photos) { photo ->
-                    PhotoListItem(
-                        modifier = Modifier.size(96.dp),
-                        photo = photo
-                    )
-                }
 
-                if (state.isLoading) {
-                    item(span = { GridItemSpan(maxLineSpan) }) {
-                        // Wskaźnik ładowania na dole listy
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(spacing.small),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            CircularProgressIndicator()
-                        }
+        Text(
+            text = stringResource(R.string.list_of_photos),
+            style = MaterialTheme.typography.titleLarge
+        )
+        Spacer(modifier = Modifier.height(spacing.regular))
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(3),
+            state = gridState,
+            contentPadding = PaddingValues(spacing.small),
+            horizontalArrangement = Arrangement.spacedBy(spacing.small),
+            verticalArrangement = Arrangement.spacedBy(spacing.small),
+            modifier = Modifier.fillMaxSize()
+        ) {
+            items(state.photos) { photo ->
+                PhotoListItem(
+                    modifier = Modifier
+                        .size(96.dp)
+                        .clickable {
+                            onAction(PhotoListAction.OnPhotoClicked(photo))
+                        }, photo = photo
+                )
+            }
+
+            if (state.isLoading) {
+                item(span = { GridItemSpan(maxLineSpan) }) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(spacing.small),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator()
                     }
                 }
             }
+
         }
     }
 }

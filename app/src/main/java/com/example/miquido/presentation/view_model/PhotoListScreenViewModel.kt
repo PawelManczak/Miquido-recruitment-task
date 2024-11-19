@@ -4,10 +4,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.miquido.domain.Photo
 import com.example.miquido.domain.repository.PhotoRepository
+import com.example.miquido.presentation.PhotoListEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -19,6 +22,9 @@ class PhotoListScreenViewModel @Inject constructor(private val repository: Photo
     private val _state = MutableStateFlow(PhotoListScreenState())
     val state = _state.asStateFlow()
 
+    private val _events = Channel<PhotoListEvent>()
+    val events = _events.receiveAsFlow()
+
     private var isLoadingMore = false
 
     init {
@@ -26,7 +32,7 @@ class PhotoListScreenViewModel @Inject constructor(private val repository: Photo
     }
 
     fun loadPhotos() {
-        if (state.value.isLoading || isLoadingMore) return  // Zapobiegaj wielokrotnym wywołaniom
+        if (state.value.isLoading || isLoadingMore) return
         isLoadingMore = true
         _state.update { it.copy(isLoading = true) }
         viewModelScope.launch(Dispatchers.IO) {
@@ -41,7 +47,6 @@ class PhotoListScreenViewModel @Inject constructor(private val repository: Photo
                     )
                 }
             } else {
-                // Obsługa błędów
                 _state.update {
                     it.copy(
                         isLoading = false,
