@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.miquido.domain.Photo
 import com.example.miquido.domain.repository.PhotoRepository
+import com.example.miquido.domain.util.onError
+import com.example.miquido.domain.util.onSuccess
 import com.example.miquido.presentation.PhotoListAction
 import com.example.miquido.presentation.PhotoListEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -37,10 +39,10 @@ class PhotoListScreenViewModel @Inject constructor(private val repository: Photo
 
         isLoadingMore = true
         _state.update { it.copy(isLoading = true) }
+
         viewModelScope.launch(Dispatchers.IO) {
-            val photosResult = repository.getPhotos(state.value.currentPage)
-            if (photosResult.isSuccess) {
-                val newPhotos = photosResult.getOrDefault(emptyList())
+            repository.getPhotos(state.value.currentPage).onSuccess {
+                val newPhotos = it
                 _state.update {
                     it.copy(
                         photos = it.photos + newPhotos,
@@ -48,12 +50,8 @@ class PhotoListScreenViewModel @Inject constructor(private val repository: Photo
                         currentPage = it.currentPage + 1
                     )
                 }
-            } else {
-                _state.update {
-                    it.copy(
-                        isLoading = false, error = photosResult.exceptionOrNull()?.message
-                    )
-                }
+            }.onError { error ->
+                _events.send(PhotoListEvent.Error(error))
             }
             isLoadingMore = false
         }

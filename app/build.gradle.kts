@@ -74,4 +74,5 @@ dependencies {
     implementation(libs.coil.compose)
     implementation(libs.navigation.compose)
     implementation(libs.kotlinx.serialization.json)
+
 }

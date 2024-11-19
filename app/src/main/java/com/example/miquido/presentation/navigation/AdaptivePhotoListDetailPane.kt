@@ -17,6 +17,7 @@ import com.example.miquido.presentation.PhotoListEvent
 import com.example.miquido.presentation.screen.PhotoDetailsScreen
 import com.example.miquido.presentation.screen.PhotoListScreen
 import com.example.miquido.presentation.util.ObserveAsEvents
+import com.example.miquido.presentation.util.toString
 import com.example.miquido.presentation.view_model.PhotoListScreenViewModel
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
@@ -31,8 +32,8 @@ fun AdaptivePhotoListDetailPane(
     val context = LocalContext.current
     ObserveAsEvents(events = vm.events) { event ->
         when (event) {
-            PhotoListEvent.Error -> {
-                Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()
+            is PhotoListEvent.Error -> {
+                Toast.makeText(context, event.error.toString(context), Toast.LENGTH_LONG).show()
             }
         }
     }

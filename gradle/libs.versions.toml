@@ -16,6 +16,7 @@ composeNavigation = "2.8.0-alpha08"
 serialization = "1.6.3"
 
 
+
 coil = "2.6.0"
 retrofit = "2.9.0"
 navigationRuntimeKtx = "2.8.4"
