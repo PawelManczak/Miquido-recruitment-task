@@ -1,4 +1,4 @@
-package com.example.miquido.presentation.ui.theme
+package com.example.miquido.presentation.theme
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.compositionLocalOf

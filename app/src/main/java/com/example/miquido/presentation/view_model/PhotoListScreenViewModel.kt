@@ -19,27 +19,44 @@ class PhotoListScreenViewModel @Inject constructor(private val repository: Photo
     private val _state = MutableStateFlow(PhotoListScreenState())
     val state = _state.asStateFlow()
 
+    private var isLoadingMore = false
+
     init {
         loadPhotos()
     }
 
     fun loadPhotos() {
+        if (state.value.isLoading || isLoadingMore) return  // Zapobiegaj wielokrotnym wywołaniom
+        isLoadingMore = true
+        _state.update { it.copy(isLoading = true) }
         viewModelScope.launch(Dispatchers.IO) {
-            val photos = repository.getPhotos(state.value.currentPage)
-            if (photos.isSuccess) {
+            val photosResult = repository.getPhotos(state.value.currentPage)
+            if (photosResult.isSuccess) {
+                val newPhotos = photosResult.getOrDefault(emptyList())
                 _state.update {
                     it.copy(
-                        photos = photos.getOrDefault(emptyList()), isLoading = false
+                        photos = it.photos + newPhotos,
+                        isLoading = false,
+                        currentPage = it.currentPage + 1
+                    )
+                }
+            } else {
+                // Obsługa błędów
+                _state.update {
+                    it.copy(
+                        isLoading = false,
+                        error = photosResult.exceptionOrNull()?.message
                     )
                 }
             }
-
+            isLoadingMore = false
         }
     }
 }
 
 data class PhotoListScreenState(
     val photos: List<Photo> = emptyList(),
-    val isLoading: Boolean = true,
+    val isLoading: Boolean = false,
     val currentPage: Int = 1,
+    val error: String? = null
 )

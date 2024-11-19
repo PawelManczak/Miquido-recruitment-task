@@ -1,7 +1,6 @@
 package com.example.miquido.data.api
 
 import com.example.miquido.data.model.PhotoDto
-import com.example.miquido.domain.Photo
 import retrofit2.http.GET
 import retrofit2.http.Query
 

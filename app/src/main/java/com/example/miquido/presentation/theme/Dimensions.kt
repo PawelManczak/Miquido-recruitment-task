@@ -1,4 +1,4 @@
-package com.example.miquido.presentation.ui.theme
+package com.example.miquido.presentation.theme
 
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.unit.Dp

@@ -1,4 +1,4 @@
-package com.example.miquido.presentation.ui.theme
+package com.example.miquido.presentation.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

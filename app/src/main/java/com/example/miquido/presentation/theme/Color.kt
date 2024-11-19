@@ -1,4 +1,4 @@
-package com.example.miquido.presentation.ui.theme
+package com.example.miquido.presentation.theme
 
 import androidx.compose.ui.graphics.Color
 

@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import com.example.miquido.presentation.screen.PhotoListScreen
-import com.example.miquido.presentation.ui.theme.MiquidoTheme
+import com.example.miquido.presentation.theme.MiquidoTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
