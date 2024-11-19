@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.miquido.domain.Photo
 import com.example.miquido.domain.repository.PhotoRepository
+import com.example.miquido.presentation.PhotoListAction
 import com.example.miquido.presentation.PhotoListEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -33,6 +34,7 @@ class PhotoListScreenViewModel @Inject constructor(private val repository: Photo
 
     fun loadPhotos() {
         if (state.value.isLoading || isLoadingMore) return
+
         isLoadingMore = true
         _state.update { it.copy(isLoading = true) }
         viewModelScope.launch(Dispatchers.IO) {
@@ -49,12 +51,19 @@ class PhotoListScreenViewModel @Inject constructor(private val repository: Photo
             } else {
                 _state.update {
                     it.copy(
-                        isLoading = false,
-                        error = photosResult.exceptionOrNull()?.message
+                        isLoading = false, error = photosResult.exceptionOrNull()?.message
                     )
                 }
             }
             isLoadingMore = false
+        }
+    }
+
+    fun onAction(action: PhotoListAction) {
+        when (action) {
+            is PhotoListAction.OnPhotoClicked -> {
+                _state.update { it.copy(selectedPhoto = action.photo) }
+            }
         }
     }
 }
@@ -63,5 +72,6 @@ data class PhotoListScreenState(
     val photos: List<Photo> = emptyList(),
     val isLoading: Boolean = false,
     val currentPage: Int = 1,
-    val error: String? = null
+    val error: String? = null,
+    val selectedPhoto: Photo? = null
 )

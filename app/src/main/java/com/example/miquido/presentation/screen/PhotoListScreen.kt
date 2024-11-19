@@ -46,7 +46,6 @@ fun PhotoListScreen(
 
     val vm = hiltViewModel<PhotoListScreenViewModel>()
 
-    //val state by vm.state.collectAsState()
     val spacing = LocalSpacing.current
 
     val gridState = rememberLazyGridState()
@@ -61,19 +60,21 @@ fun PhotoListScreen(
             }
     }
 
-    Column(Modifier.padding(spacing.regular)) {
+    Column(modifier.padding(spacing.regular)) {
 
         Text(
             text = stringResource(R.string.list_of_photos),
             style = MaterialTheme.typography.titleLarge
         )
+
         Spacer(modifier = Modifier.height(spacing.regular))
+
         LazyVerticalGrid(
             columns = GridCells.Fixed(3),
             state = gridState,
-            contentPadding = PaddingValues(spacing.small),
-            horizontalArrangement = Arrangement.spacedBy(spacing.small),
-            verticalArrangement = Arrangement.spacedBy(spacing.small),
+            contentPadding = PaddingValues(spacing.regular),
+            horizontalArrangement = Arrangement.spacedBy(spacing.regular),
+            verticalArrangement = Arrangement.spacedBy(spacing.regular),
             modifier = Modifier.fillMaxSize()
         ) {
             items(state.photos) { photo ->

@@ -2,4 +2,9 @@
     <string name="app_name">miquido</string>
     <string name="photo_by">Photo by %1$s</string>
     <string name="list_of_photos">List of photos</string>
+    <string name="photo_details_screen">Photo details screen</string>
+    <string name="author">Author:</string>
+    <string name="width">Width:</string>
+    <string name="height">Height:</string>
+    <string name="url">URL:</string>
 </resources>

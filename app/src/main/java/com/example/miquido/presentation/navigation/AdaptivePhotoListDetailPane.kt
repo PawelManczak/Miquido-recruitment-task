@@ -41,6 +41,7 @@ fun AdaptivePhotoListDetailPane(
     NavigableListDetailPaneScaffold(navigator = navigator, listPane = {
         AnimatedPane {
             PhotoListScreen(modifier = modifier, state = state, onAction = {
+                vm.onAction(it)
                 when (it) {
                     is PhotoListAction.OnPhotoClicked -> navigator.navigateTo(
                         ListDetailPaneScaffoldRole.Detail
@@ -50,7 +51,7 @@ fun AdaptivePhotoListDetailPane(
         }
     }, detailPane = {
         AnimatedPane {
-            PhotoDetailsScreen(photo = state.photos.first())
+            PhotoDetailsScreen(state = state)
         }
     }, modifier = modifier
     )
