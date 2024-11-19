@@ -51,6 +51,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.navigation.runtime.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -61,4 +62,10 @@ dependencies {
 
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
+
+    implementation(libs.squareup.retrofit2)
+    implementation(libs.squareup.retrofit2.gson.converter)
+    implementation(libs.squareup.okhttp3.logging.interceptor)
+    implementation(libs.google.code.gson)
+    implementation(libs.coil.compose)
 }

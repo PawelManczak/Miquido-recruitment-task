@@ -1,4 +1,4 @@
-package com.example.miquido
+package com.example.miquido.presentation
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
