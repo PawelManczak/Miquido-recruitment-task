@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.miquido.domain.Photo
 import com.example.miquido.domain.repository.PhotoRepository
+import com.example.miquido.domain.util.NetworkError
 import com.example.miquido.domain.util.onError
 import com.example.miquido.domain.util.onSuccess
 import com.example.miquido.presentation.PhotoListAction
@@ -34,11 +35,11 @@ class PhotoListScreenViewModel @Inject constructor(private val repository: Photo
         loadPhotos()
     }
 
-    fun loadPhotos() {
+    private fun loadPhotos() {
         if (state.value.isLoading || isLoadingMore) return
 
         isLoadingMore = true
-        _state.update { it.copy(isLoading = true) }
+        _state.update { it.copy(isLoading = true, error = null) }
 
         viewModelScope.launch(Dispatchers.IO) {
             repository.getPhotos(state.value.currentPage).onSuccess {
@@ -51,6 +52,7 @@ class PhotoListScreenViewModel @Inject constructor(private val repository: Photo
                     )
                 }
             }.onError { error ->
+                _state.update { it.copy(isLoading = false, error = error) }
                 _events.send(PhotoListEvent.Error(error))
             }
             isLoadingMore = false
@@ -62,6 +64,14 @@ class PhotoListScreenViewModel @Inject constructor(private val repository: Photo
             is PhotoListAction.OnPhotoClicked -> {
                 _state.update { it.copy(selectedPhoto = action.photo) }
             }
+
+            is PhotoListAction.OnRetryClicked -> {
+                loadPhotos()
+            }
+
+            PhotoListAction.OnLoadMorePhotos -> {
+                loadPhotos()
+            }
         }
     }
 }
@@ -70,6 +80,6 @@ data class PhotoListScreenState(
     val photos: List<Photo> = emptyList(),
     val isLoading: Boolean = false,
     val currentPage: Int = 1,
-    val error: String? = null,
+    val error: NetworkError? = null,
     val selectedPhoto: Photo? = null
 )

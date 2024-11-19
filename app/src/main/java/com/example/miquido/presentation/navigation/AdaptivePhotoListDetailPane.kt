@@ -47,6 +47,8 @@ fun AdaptivePhotoListDetailPane(
                     is PhotoListAction.OnPhotoClicked -> navigator.navigateTo(
                         ListDetailPaneScaffoldRole.Detail
                     )
+
+                    else -> {}
                 }
             })
         }

@@ -1,4 +1,4 @@
-package com.example.miquido.presentation
+package com.example.miquido.presentation.effect
 
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
@@ -22,9 +22,9 @@ import com.example.miquido.presentation.theme.MiquidoTheme
 @Composable
 fun ShimmerEffect(modifier: Modifier = Modifier) {
     val shimmerColors = listOf(
-        Color.LightGray.copy(alpha = 0.6f),
+        Color.LightGray.copy(alpha = 0.9f),
         Color.Gray.copy(alpha = 0.3f),
-        Color.LightGray.copy(alpha = 0.6f)
+        Color.LightGray.copy(alpha = 0.9f)
     )
 
     val transition = rememberInfiniteTransition()

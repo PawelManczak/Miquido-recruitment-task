@@ -16,25 +16,29 @@ import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.miquido.R
 import com.example.miquido.presentation.PhotoListAction
 import com.example.miquido.presentation.item.PhotoListItem
 import com.example.miquido.presentation.theme.LocalSpacing
+import com.example.miquido.presentation.util.toString
 import com.example.miquido.presentation.view_model.PhotoListScreenState
-import com.example.miquido.presentation.view_model.PhotoListScreenViewModel
 import kotlinx.coroutines.flow.distinctUntilChanged
 
 @Composable
@@ -43,10 +47,8 @@ fun PhotoListScreen(
     onAction: (PhotoListAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-
-    val vm = hiltViewModel<PhotoListScreenViewModel>()
-
     val spacing = LocalSpacing.current
+    val context = LocalContext.current
 
     val gridState = rememberLazyGridState()
 
@@ -54,8 +56,8 @@ fun PhotoListScreen(
         snapshotFlow { gridState.firstVisibleItemIndex + gridState.layoutInfo.visibleItemsInfo.size }.distinctUntilChanged()
             .collect { visibleItemCount ->
                 val totalItemsCount = gridState.layoutInfo.totalItemsCount
-                if (visibleItemCount >= totalItemsCount - 3 && !state.isLoading) {
-                    vm.loadPhotos()
+                if (visibleItemCount >= totalItemsCount - 3) {
+                    onAction(PhotoListAction.OnLoadMorePhotos)
                 }
             }
     }
@@ -96,6 +98,48 @@ fun PhotoListScreen(
                         contentAlignment = Alignment.Center
                     ) {
                         CircularProgressIndicator()
+                    }
+                }
+            }
+
+            if (state.error != null) {
+                item(span = { GridItemSpan(maxLineSpan) }) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(spacing.small),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Warning,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.errorContainer,
+                            modifier = Modifier.size(spacing.extraLarge)
+                        )
+
+                        Spacer(Modifier.height(spacing.regular))
+
+                        Text(
+                            text = state.error.toString(context = context),
+                            color = MaterialTheme.colorScheme.error,
+                            style = MaterialTheme.typography.bodyLarge,
+                            textAlign = TextAlign.Center
+                        )
+
+                        Button(
+                            onClick = {
+                                onAction(PhotoListAction.OnRetryClicked)
+                            },
+                            modifier = Modifier.padding(top = spacing.regular),
+                            colors = ButtonDefaults.buttonColors()
+                                .copy(containerColor = MaterialTheme.colorScheme.errorContainer)
+                        ) {
+                            Text(
+                                text = stringResource(R.string.retry),
+                                color = MaterialTheme.colorScheme.onErrorContainer
+                            )
+                        }
+
                     }
                 }
             }
