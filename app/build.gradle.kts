@@ -61,6 +61,7 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
     implementation(libs.hilt.android)
+    implementation(libs.androidx.compose.hilt.navigation)
     ksp(libs.hilt.compiler)
 
     implementation(libs.squareup.retrofit2)
