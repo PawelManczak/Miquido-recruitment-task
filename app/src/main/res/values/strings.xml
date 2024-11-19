@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">miquido</string>
+    <string name="photo_by">Photo by %1$s</string>
 </resources>

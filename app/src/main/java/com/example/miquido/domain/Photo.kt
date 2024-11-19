@@ -5,5 +5,5 @@ data class Photo(
     val author: String,
     val width: Int,
     val height: Int,
-    val download_url: String
-)
+    val imageUrl: String
+){}

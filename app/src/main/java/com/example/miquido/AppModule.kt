@@ -1,7 +1,7 @@
 package com.example.miquido
 
 import com.example.miquido.data.PhotoRepositoryImpl
-import com.example.miquido.domain.ApiService
+import com.example.miquido.data.api.ApiService
 import com.example.miquido.domain.repository.PhotoRepository
 import dagger.Module
 import dagger.Provides

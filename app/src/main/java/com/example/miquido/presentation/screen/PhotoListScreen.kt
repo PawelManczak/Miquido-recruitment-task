@@ -1,17 +1,18 @@
 package com.example.miquido.presentation.screen
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -20,10 +21,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import coil.compose.AsyncImage
-import com.example.miquido.domain.Photo
+import com.example.miquido.presentation.item.PhotoListItem
 import com.example.miquido.presentation.view_model.PhotoListScreenViewModel
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun PhotoListScreen(navController: NavController) {
 
@@ -31,36 +32,26 @@ fun PhotoListScreen(navController: NavController) {
 
     val state = vm.state.collectAsState().value
 
-    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+    Column(Modifier.padding(16.dp)) {
         if (state.isLoading) {
             CircularProgressIndicator()
         } else {
-            LazyColumn {
-                items(state.photos) { photo ->
-                    PhotoListItem(photo) { }
+            Text(text = "List of photos", style = MaterialTheme.typography.titleLarge)
+            Spacer(modifier = Modifier.height(16.dp))
+            FlowRow(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState()),
+                maxItemsInEachRow = 3,
+                horizontalArrangement = Arrangement.spacedBy(32.dp, Alignment.CenterHorizontally),
+                verticalArrangement = Arrangement.spacedBy(32.dp)
+            ) {
+                state.photos.forEach {
+                    PhotoListItem(modifier = Modifier.size(96.dp), photo = it)
                 }
             }
         }
-
     }
-}
 
-@Composable
-fun PhotoListItem(photo: Photo, onItemClick: (Photo) -> Unit) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { onItemClick(photo) }
-            .padding(8.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        AsyncImage(
-            model = photo.download_url,
-            contentDescription = "Photo by ${photo.author}",
-            modifier = Modifier
-                .size(64.dp)
-        )
-        Spacer(modifier = Modifier.width(16.dp))
-        Text(text = "ID: ${photo.id}")
-    }
+
 }
