@@ -18,10 +18,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.miquido.R
 import com.example.miquido.presentation.item.PhotoListItem
+import com.example.miquido.presentation.ui.theme.LocalSpacing
 import com.example.miquido.presentation.view_model.PhotoListScreenViewModel
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -31,20 +34,26 @@ fun PhotoListScreen(navController: NavController) {
     val vm = hiltViewModel<PhotoListScreenViewModel>()
 
     val state = vm.state.collectAsState().value
+    val spacing = LocalSpacing.current
 
-    Column(Modifier.padding(16.dp)) {
+    Column(Modifier.padding(spacing.regular)) {
         if (state.isLoading) {
             CircularProgressIndicator()
         } else {
-            Text(text = "List of photos", style = MaterialTheme.typography.titleLarge)
-            Spacer(modifier = Modifier.height(16.dp))
+            Text(
+                text = stringResource(R.string.list_of_photos),
+                style = MaterialTheme.typography.titleLarge
+            )
+            Spacer(modifier = Modifier.height(spacing.regular))
             FlowRow(
                 modifier = Modifier
                     .fillMaxSize()
                     .verticalScroll(rememberScrollState()),
                 maxItemsInEachRow = 3,
-                horizontalArrangement = Arrangement.spacedBy(32.dp, Alignment.CenterHorizontally),
-                verticalArrangement = Arrangement.spacedBy(32.dp)
+                horizontalArrangement = Arrangement.spacedBy(
+                    spacing.large, Alignment.CenterHorizontally
+                ),
+                verticalArrangement = Arrangement.spacedBy(spacing.large)
             ) {
                 state.photos.forEach {
                     PhotoListItem(modifier = Modifier.size(96.dp), photo = it)
