@@ -13,4 +13,6 @@
     <string name="error_unknown">Something went wrong. Please try again later.</string>
     <string name="error_serialization">Couldn\'t serialize or deserialize data.</string>
     <string name="retry">Retry</string>
+    <string name="loading_indicator">loading_indicator</string>
+    <string name="id">id: %1$s</string>
 </resources>

@@ -18,14 +18,14 @@ import com.example.miquido.presentation.screen.PhotoDetailsScreen
 import com.example.miquido.presentation.screen.PhotoListScreen
 import com.example.miquido.presentation.util.ObserveAsEvents
 import com.example.miquido.presentation.util.toString
-import com.example.miquido.presentation.view_model.PhotoListScreenViewModel
+import com.example.miquido.presentation.view_model.PhotoListViewModel
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
 fun AdaptivePhotoListDetailPane(
     modifier: Modifier = Modifier
 ) {
-    val vm = hiltViewModel<PhotoListScreenViewModel>()
+    val vm = hiltViewModel<PhotoListViewModel>()
     val state by vm.state.collectAsStateWithLifecycle()
 
 

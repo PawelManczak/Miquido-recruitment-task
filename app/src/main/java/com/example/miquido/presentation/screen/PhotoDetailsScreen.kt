@@ -25,6 +25,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -34,7 +35,7 @@ import com.example.miquido.presentation.effect.ShimmerEffect
 import com.example.miquido.presentation.item.ErrorContent
 import com.example.miquido.presentation.theme.LocalRoundedCornerShapes
 import com.example.miquido.presentation.theme.LocalSpacing
-import com.example.miquido.presentation.view_model.PhotoListScreenState
+import com.example.miquido.presentation.PhotoListScreenState
 
 @Composable
 fun PhotoDetailsScreen(
@@ -51,7 +52,12 @@ fun PhotoDetailsScreen(
 
 
     if (state.isLoading) {
-        Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        Box(
+            modifier = modifier
+                .fillMaxSize()
+                .testTag(stringResource(R.string.loading_indicator)),
+            contentAlignment = Alignment.Center
+        ) {
             CircularProgressIndicator()
         }
     } else if (selectedPhoto != null) {
@@ -66,8 +72,7 @@ fun PhotoDetailsScreen(
             Spacer(Modifier.height(spacing.regular))
 
             key(retryTrigger) {
-                SubcomposeAsyncImage(
-                    model = selectedPhoto.imageUrl,
+                SubcomposeAsyncImage(model = selectedPhoto.imageUrl,
                     contentDescription = null,
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
@@ -89,8 +94,7 @@ fun PhotoDetailsScreen(
                     },
                     onSuccess = {
                         isError = false
-                    }
-                )
+                    })
             }
             Spacer(Modifier.height(spacing.regular))
 

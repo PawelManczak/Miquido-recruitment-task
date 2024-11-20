@@ -30,6 +30,7 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -38,7 +39,7 @@ import com.example.miquido.presentation.PhotoListAction
 import com.example.miquido.presentation.item.PhotoListItem
 import com.example.miquido.presentation.theme.LocalSpacing
 import com.example.miquido.presentation.util.toString
-import com.example.miquido.presentation.view_model.PhotoListScreenState
+import com.example.miquido.presentation.PhotoListScreenState
 import kotlinx.coroutines.flow.distinctUntilChanged
 
 @Composable
@@ -80,13 +81,12 @@ fun PhotoListScreen(
             modifier = Modifier.fillMaxSize()
         ) {
             items(state.photos) { photo ->
-                PhotoListItem(
-                    modifier = Modifier
-                        .size(96.dp)
-                        .clickable {
-                            onAction(PhotoListAction.OnPhotoClicked(photo))
-                        }, photo = photo
-                )
+                PhotoListItem(modifier = Modifier
+                    .testTag(photo.id)
+                    .size(96.dp)
+                    .clickable {
+                        onAction(PhotoListAction.OnPhotoClicked(photo))
+                    }, photo = photo)
             }
 
             if (state.isLoading) {
@@ -97,7 +97,7 @@ fun PhotoListScreen(
                             .padding(spacing.small),
                         contentAlignment = Alignment.Center
                     ) {
-                        CircularProgressIndicator()
+                        CircularProgressIndicator(Modifier.testTag(stringResource(R.string.loading_indicator)))
                     }
                 }
             }

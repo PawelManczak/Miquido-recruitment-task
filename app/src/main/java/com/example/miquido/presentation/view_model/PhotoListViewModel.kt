@@ -2,13 +2,12 @@ package com.example.miquido.presentation.view_model
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.miquido.domain.Photo
 import com.example.miquido.domain.repository.PhotoRepository
-import com.example.miquido.domain.util.NetworkError
 import com.example.miquido.domain.util.onError
 import com.example.miquido.domain.util.onSuccess
 import com.example.miquido.presentation.PhotoListAction
 import com.example.miquido.presentation.PhotoListEvent
+import com.example.miquido.presentation.PhotoListScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
@@ -20,7 +19,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class PhotoListScreenViewModel @Inject constructor(private val repository: PhotoRepository) :
+class PhotoListViewModel @Inject constructor(private val repository: PhotoRepository) :
     ViewModel() {
 
     private val _state = MutableStateFlow(PhotoListScreenState())
@@ -75,11 +74,3 @@ class PhotoListScreenViewModel @Inject constructor(private val repository: Photo
         }
     }
 }
-
-data class PhotoListScreenState(
-    val photos: List<Photo> = emptyList(),
-    val isLoading: Boolean = false,
-    val currentPage: Int = 1,
-    val error: NetworkError? = null,
-    val selectedPhoto: Photo? = null
-)

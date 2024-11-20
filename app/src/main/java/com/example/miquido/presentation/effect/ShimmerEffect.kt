@@ -22,9 +22,9 @@ import com.example.miquido.presentation.theme.MiquidoTheme
 @Composable
 fun ShimmerEffect(modifier: Modifier = Modifier) {
     val shimmerColors = listOf(
-        Color.LightGray.copy(alpha = 0.9f),
+        Color.DarkGray.copy(alpha = 0.4f),
         Color.Gray.copy(alpha = 0.3f),
-        Color.LightGray.copy(alpha = 0.9f)
+        Color.DarkGray.copy(alpha = 0.4f)
     )
 
     val transition = rememberInfiniteTransition()
