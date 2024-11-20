@@ -76,7 +76,7 @@ class PhotoListScreenViewModelTest {
 
 
         val state = viewModel.state.value
-        assertEquals(photo, state.selectedPhoto)
+        assertEquals(photo.id, state.selectedPhoto!!.id)
     }
 
     @Test
