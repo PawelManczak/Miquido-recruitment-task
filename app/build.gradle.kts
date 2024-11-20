@@ -25,8 +25,7 @@ android {
         release {
             isMinifyEnabled = false
             proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             )
         }
     }
@@ -73,6 +72,8 @@ dependencies {
     implementation(libs.hilt.android)
     implementation(libs.androidx.compose.hilt.navigation)
     ksp(libs.hilt.compiler)
+    testImplementation(libs.androidx.core.testing)
+
 
     implementation(libs.squareup.retrofit2)
     implementation(libs.squareup.retrofit2.gson.converter)

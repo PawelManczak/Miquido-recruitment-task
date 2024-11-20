@@ -40,7 +40,7 @@ class PhotoListViewModel @Inject constructor(private val repository: PhotoReposi
         isLoadingMore = true
         _state.update { it.copy(isLoading = true, error = null) }
 
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             repository.getPhotos(state.value.currentPage).onSuccess {
                 val newPhotos = it
                 _state.update {
