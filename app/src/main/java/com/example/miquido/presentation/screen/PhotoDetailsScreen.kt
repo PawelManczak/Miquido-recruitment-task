@@ -31,11 +31,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.SubcomposeAsyncImage
 import com.example.miquido.R
+import com.example.miquido.presentation.PhotoListScreenState
 import com.example.miquido.presentation.effect.ShimmerEffect
 import com.example.miquido.presentation.item.ErrorContent
 import com.example.miquido.presentation.theme.LocalRoundedCornerShapes
 import com.example.miquido.presentation.theme.LocalSpacing
-import com.example.miquido.presentation.PhotoListScreenState
 
 @Composable
 fun PhotoDetailsScreen(

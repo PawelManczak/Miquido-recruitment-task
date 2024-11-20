@@ -36,10 +36,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.miquido.R
 import com.example.miquido.presentation.PhotoListAction
+import com.example.miquido.presentation.PhotoListScreenState
 import com.example.miquido.presentation.item.PhotoListItem
 import com.example.miquido.presentation.theme.LocalSpacing
 import com.example.miquido.presentation.util.toString
-import com.example.miquido.presentation.PhotoListScreenState
 import kotlinx.coroutines.flow.distinctUntilChanged
 
 @Composable

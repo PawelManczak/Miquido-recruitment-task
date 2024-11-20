@@ -24,7 +24,7 @@ class PhotoRepositoryImpl @Inject constructor(private val apiService: ApiService
                 val response = apiService.getPhotos(page)
 
                 if (response.isSuccessful) {
-                    response.body()?.map { it.toDomain() } ?: throw SerializationException()
+                    response.body()?.map { it.toDomain(size = size) } ?: throw SerializationException()
                 } else {
                     throw HttpException(response)
                 }

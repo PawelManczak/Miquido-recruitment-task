@@ -9,7 +9,6 @@ import com.example.miquido.presentation.PhotoListAction
 import com.example.miquido.presentation.PhotoListEvent
 import com.example.miquido.presentation.PhotoListScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -61,7 +60,7 @@ class PhotoListViewModel @Inject constructor(private val repository: PhotoReposi
     fun onAction(action: PhotoListAction) {
         when (action) {
             is PhotoListAction.OnPhotoClicked -> {
-                _state.update { it.copy(selectedPhoto = action.photo) }
+                _state.update { it.copy(selectedPhoto = action.photo.toFullSize()) }
             }
 
             is PhotoListAction.OnRetryClicked -> {
